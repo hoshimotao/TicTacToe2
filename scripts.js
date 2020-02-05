@@ -1,5 +1,6 @@
 (function ($) {
   let createSelect = function (options) {
+    // Create different mode options within a selection
     var object = $ ('<select>');
 
     options.forEach (option => {
@@ -15,23 +16,24 @@
     location.reload ();
   });
 
+  // Establish X's and O's as array of Strings
+  // Establish initial turn
   let getTurnText = (function () {
     let symbols = ['X', 'O'];
     let turn = 0;
 
     return function () {
       let symbol = symbols[turn];
-
       turn += 1;
-
+      // Set turn boundary
       if (turn >= symbols.length) {
         turn = 0;
       }
-
       return symbol;
     };
   }) ();
 
+  // Draw up a game with a button
   let createGameButton = function () {
     return $ ('<button>').addClass ('game-button').click (function () {
       let self = $ (this);
@@ -46,6 +48,7 @@
     });
   };
 
+  // Set size of game board
   let createGameGrid = function (size) {
     let table = $ ('<table>').addClass ('game-table');
 
@@ -83,6 +86,7 @@
   let checkWinner = function () {
     let state = readTable ($ ('.game-table'));
 
+    // Return a winner in either case
     return (
       checkRowWinner (state) ||
       checkColumnWinner (state) ||
@@ -90,6 +94,7 @@
     );
   };
 
+  // Check if winner won by row
   let checkRowWinner = function (state) {
     for (let r = 0; r < state.length; r += 1) {
       let first = state[r][0];
@@ -106,6 +111,7 @@
     }
   };
 
+  // Check if winner won by column
   let checkColumnWinner = function (state) {
     for (let c = 0; c < state.length; c += 1) {
       let first = state[0][c];
@@ -122,9 +128,9 @@
     }
   };
 
+  // Check if winner won by diagonal
   let checkDiagonalWinner = function (state) {
-    
-    // initialize state once
+    // initialize state once (top-left)
     let first = state[0][0];
     if (first === '') {
       return;
@@ -137,7 +143,7 @@
       }
     }
 
-    // initialize state second time
+    // initialize state second time (bottom left)
     first = state[state.length - 1][0];
     if (first === '') {
       return;
@@ -153,7 +159,7 @@
   };
 
   $ (document).ready (function () {
-    // GAME MODES
+    // Game mode options
     var gridSelect = createSelect (['3 x 3', '4 x 4', '10 x 10']);
 
     console.log (gridSelect);
@@ -163,7 +169,7 @@
         $ ('<button>').text ('Create Board').click (function () {
           $ ('.game-table').detach ();
 
-          // TARGET EACH GAME MODE BY INDEX
+          // Select game mode by index
           createGameGrid (
             gridSelect.val ()[0] && gridSelect.val ().slice (0, 2)
           ).appendTo ('body');
