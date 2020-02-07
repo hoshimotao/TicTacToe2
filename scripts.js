@@ -1,3 +1,9 @@
+// Reset
+var reset = $ ('.reset');
+reset.on ('click', function (e) {
+  location.reload ();
+});
+
 (function ($) {
   let createSelect = function (options) {
     // Create different mode options within a selection
@@ -10,16 +16,10 @@
     return object;
   };
 
-  // Reset
-  var reset = $ ('.reset');
-  reset.on ('click', function (e) {
-    location.reload ();
-  });
-
   // Establish X's and O's as array of Strings
   // Establish initial turn
   let getTurnText = (function () {
-    let symbols = ['X', 'O'];
+    const symbols = ['X', 'O'];
     let turn = 0;
 
     return function () {
@@ -96,15 +96,15 @@
 
   // Check if winner won by row
   let checkRowWinner = function (state) {
-    for (let r = 0; r < state.length; r += 1) {
-      let first = state[r][0];
-      if (first === '') {
-        break;
-      }
-      for (let c = 1; c < state.length; c += 1) {
-        if (state[r][c] !== first) {
+    for (let r = 0; r < state.length; r++) {
+      for (let c = 1; c < state.length; c++) {
+        let first = state[r][0];
+        if (first === '') {
+          break;
+        } else if (state[r][c] !== first) {
           break;
         } else if (c === state.length - 1) {
+          first = state[r][c];
           return first;
         }
       }
@@ -113,13 +113,12 @@
 
   // Check if winner won by column
   let checkColumnWinner = function (state) {
-    for (let c = 0; c < state.length; c += 1) {
-      let first = state[0][c];
-      if (first === '') {
-        break;
-      }
-      for (let r = 1; r < state.length; r += 1) {
-        if (state[r][c] !== first) {
+    for (let c = 0; c < state.length; c++) {
+      for (let r = 1; r < state.length; r++) {
+        let first = state[0][c];
+        if (first === '') {
+          break;
+        } else if (state[r][c] !== first) {
           break;
         } else if (r === state.length - 1) {
           return first;
@@ -130,26 +129,26 @@
 
   // Check if winner won by diagonal
   let checkDiagonalWinner = function (state) {
-    // initialize state once (top-left)
-    let first = state[0][0];
-    if (first === '') {
-      return;
-    }
+
+
+
     for (let i = 1; i < state.length; i += 1) {
-      if (state[i][i] !== first) {
+      let first = state[0][0];
+      if (first === '') {
+        break;
+      } else if (state[i][i] !== first) {
         break;
       } else if (i === state.length - 1) {
         return first;
       }
     }
 
-    // initialize state second time (bottom left)
-    first = state[state.length - 1][0];
-    if (first === '') {
-      return;
-    }
-
+    
     for (let i = 1; i < state.length; i += 1) {
+      first = state[state.length - 1][0];
+      if (first === '') {
+        break;
+      }
       if (state[state.length - 1 - i][i] !== first) {
         break;
       } else if (i === state.length - 1) {
